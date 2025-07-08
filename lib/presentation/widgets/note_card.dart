@@ -31,7 +31,7 @@ class NoteCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     note.text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),

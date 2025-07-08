@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "123456789",
+    "project_number": "613176637186",
     "project_id": "sports-edu-ad6ff",
-    "storage_bucket": "sports-edu-ad6ff.appspot.com"
+    "storage_bucket": "sports-edu-ad6ff.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789:android:abc123def456",
+        "mobilesdk_app_id": "1:613176637186:android:8312ac409b46a1fa3bb41b",
         "android_client_info": {
-          "package_name": "com.example.notes_app_simple"
+          "package_name": "com.example.notes_final"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "123456789-abc123def456.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyABC123DEF456GHI789JKL012MNO345PQR"
+          "current_key": "AIzaSyB8Ewt_ljA6x5h5H0bx6_VAueIVrDY7lEs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "123456789-abc123def456.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

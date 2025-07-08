@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/user.dart';
 
 abstract class AuthDataSource {
@@ -9,19 +10,25 @@ abstract class AuthDataSource {
 }
 
 class FirebaseAuthDataSource implements AuthDataSource {
-  FirebaseAuthDataSource({required this.firebaseAuth});
+  FirebaseAuthDataSource({required this.firebaseAuth, required this.firestore});
   
   final firebase_auth.FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
   @override
   Future<User?> getCurrentUser() async {
-    final firebaseUser = firebaseAuth.currentUser;
-    if (firebaseUser == null) return null;
-    
-    return User(
-      id: firebaseUser.uid,
-      email: firebaseUser.email ?? '',
-    );
+    try {
+      final firebaseUser = firebaseAuth.currentUser;
+      if (firebaseUser == null) return null;
+      
+      return User(
+        id: firebaseUser.uid,
+        email: firebaseUser.email ?? '',
+      );
+    } catch (e) {
+      print('getCurrentUser error: $e');
+      return null;
+    }
   }
 
   @override
@@ -32,18 +39,23 @@ class FirebaseAuthDataSource implements AuthDataSource {
         password: password,
       );
       
-      if (credential.user == null) {
-        throw Exception('Sign in failed');
+      final firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw Exception('Sign in failed - no user returned');
       }
       
-      return User(
-        id: credential.user!.uid,
-        email: credential.user!.email ?? '',
+      final user = User(
+        id: firebaseUser.uid,
+        email: firebaseUser.email ?? '',
       );
+      
+      return user;
     } on firebase_auth.FirebaseAuthException catch (e) {
+      print('FirebaseAuthException: ${e.code} - ${e.message}');
       throw Exception(_getErrorMessage(e.code));
     } catch (e) {
-      throw Exception('Sign in failed: $e');
+      print('Sign in error: $e');
+      throw Exception('Sign in failed: ${e.toString()}');
     }
   }
 
@@ -55,18 +67,23 @@ class FirebaseAuthDataSource implements AuthDataSource {
         password: password,
       );
       
-      if (credential.user == null) {
-        throw Exception('Account creation failed');
+      final firebaseUser = credential.user;
+      if (firebaseUser == null) {
+        throw Exception('Account creation failed - no user returned');
       }
       
-      return User(
-        id: credential.user!.uid,
-        email: credential.user!.email ?? '',
+      final user = User(
+        id: firebaseUser.uid,
+        email: firebaseUser.email ?? '',
       );
+      
+      return user;
     } on firebase_auth.FirebaseAuthException catch (e) {
+      print('FirebaseAuthException: ${e.code} - ${e.message}');
       throw Exception(_getErrorMessage(e.code));
     } catch (e) {
-      throw Exception('Account creation failed: $e');
+      print('Account creation error: $e');
+      throw Exception('Account creation failed: ${e.toString()}');
     }
   }
 
@@ -75,6 +92,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
     try {
       await firebaseAuth.signOut();
     } catch (e) {
+      print('Sign out error: $e');
       throw Exception('Sign out failed: $e');
     }
   }
@@ -93,8 +111,12 @@ class FirebaseAuthDataSource implements AuthDataSource {
         return 'Wrong password provided';
       case 'too-many-requests':
         return 'Too many requests. Try again later';
+      case 'invalid-credential':
+        return 'The provided credentials are invalid';
+      case 'user-disabled':
+        return 'This user account has been disabled';
       default:
-        return 'Authentication failed';
+        return 'Authentication failed. Please try again.';
     }
   }
 }

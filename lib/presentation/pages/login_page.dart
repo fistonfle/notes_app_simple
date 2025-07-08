@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
+import '../bloc/notes_bloc.dart';
 import 'notes_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -52,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
+            // Simple navigation
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => const NotesPage()),
             );

@@ -1,4 +1,4 @@
-name: notes_app_simple
+name: notes_final
 description: A notes app with Firebase integration.
 
 publish_to: 'none'
@@ -14,9 +14,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   
   # Firebase
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.15.3
-  cloud_firestore: ^4.13.6
+  firebase_core: ^2.31.0
+  firebase_auth: ^4.19.4
+  cloud_firestore: ^4.17.3
   
   # State Management
   flutter_bloc: ^8.1.3

@@ -21,6 +21,7 @@ class DependencyInjection {
   // Data Sources
   static final AuthDataSource _authDataSource = FirebaseAuthDataSource(
     firebaseAuth: FirebaseAuth.instance,
+    firestore: FirebaseFirestore.instance,
   );
 
   static final NoteDataSource _noteDataSource = FirebaseNoteDataSource(
